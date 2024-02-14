@@ -1,0 +1,78 @@
+<!-- Bootstrap Font Icon CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+  
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.4.1/css/rowReorder.dataTables.min.css"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="./estilo.css"  />
+
+<style>
+    .dataTables_empty {
+        background-color: white;
+    }
+</style>
+
+<!--https://datatables.net/reference/option/language-->
+<script>
+    $(document).ready( function () {
+        $('#datatable').DataTable({
+            responsive: true,
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            language: {
+                "lengthMenu": "Listar até _MENU_ salas por página",
+                "infoEmpty": "<strong>Sem registros disponíveis</strong>",
+                "infoFiltered": "(filtrado das _MAX_ salas nas quais você participa)",
+                "info": "Página _PAGE_ de _PAGES_",
+                "search": "Buscar sala&nbsp;&nbsp;&nbsp;",
+                "zeroRecords": "Nenhuma sala com esse(s) termo(s) foi encontrada  -  <strong>lamentamos! :(</strong>",
+                "paginate": {
+        "first":      "Primeira",
+        "last":       "Última",
+        "next":       "Próxima",
+        "previous":   "Anterior"
+    }
+            },
+            pageLength: 100
+        });
+    } );
+
+    {{#js}}
+        require(['jquery'], function($) {
+            $("#uftm-tabela td").attr('style', 'background-color: white;');
+            $("#uftm-tabela a").attr('style', 'color: #525f7f;'); // table.dataTable tr.odd
+            $("tr.odd").attr('style', 'background-color: white;');
+        })
+    {{/js}}
+
+</script>
+<div id="uftm-tabela" style="width:100%">
+<table id="datatable" class="display nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Nome completo</th>
+            <th>Nome breve</th>
+            <th>Criação</th>
+            <th>Início</th>
+            <th>Categoria</th>
+        </tr>
+    </thead>
+    <tbody>{{#disciplinas}}
+        <tr>
+            <td class="registro_tabela" style="width: 80px;"><img src="{{thumb}}" alt="Sem thumb" style="width: 80px; height: 80px; float: left"></td>
+            <td><a href="{{url}}" target="_blank">{{fullname}}</a></td>
+            <td>{{shortname}}</td>
+            <td>{{datacriacao}}</td>
+            <td>{{startdate}}</td>
+            <td>{{category}}</td>
+        </tr>
+        {{/disciplinas}}
+    </tbody>
+</table>
+</div>
