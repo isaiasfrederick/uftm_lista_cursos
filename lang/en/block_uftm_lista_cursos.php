@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['uftm_lista_cursos:addinstance'] = 'Adicionar nova instancia do plugin <xyz>';
-$string['uftm_lista_cursos:myaddinstance'] = 'Adicionar novo bloco do plugin <xyz> a dashboard';
-$string['uftm_lista_cursos'] = 'Plugin - Lista Cursos (UFTM)';
+$string['uftm_lista_cursos:addinstance'] = 'Adicionar nova instancia do plugin "UFTM - Lista de Cursos"';
+$string['uftm_lista_cursos:myaddinstance'] = 'Adicionar "UFTM - Lista de Cursos" à dashboard';
+$string['uftm_lista_cursos'] = 'UFTM - Lista Cursos';
 $string['pluginname'] = 'UFTM - Lista de Cursos';
