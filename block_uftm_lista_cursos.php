@@ -72,7 +72,14 @@ class block_uftm_lista_cursos extends block_base {
             $this->content->text = html_writer::div($anchor, '', array('id'=>$USER->id));*/
 
             $sqlEntrada =
-            "SELECT c.id AS cid, c.fullname, c.shortname, cc.name AS catname, u.id, TO_CHAR(TO_TIMESTAMP(c.timecreated), 'YYYY/mm/dd') AS datacriacao, TO_CHAR(TO_TIMESTAMP(c.startdate), 'YYYY/mm/dd') AS startdate
+            "SELECT
+                c.id AS cid,
+                c.fullname,
+                c.shortname,
+                cc.name AS catname,
+                u.id,
+                TO_CHAR(TO_TIMESTAMP(c.timecreated), 'YYYY/mm/dd') AS datacriacao,
+                TO_CHAR(TO_TIMESTAMP(c.startdate), 'YYYY/mm/dd') AS startdate
             FROM {user} u
             INNER JOIN {role_assignments} ra ON ra.userid = u.id
             INNER JOIN {context} ct ON ct.id = ra.contextid
