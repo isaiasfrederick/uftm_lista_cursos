@@ -88,7 +88,7 @@ class block_uftm_lista_cursos extends block_base {
             INNER JOIN {course_categories} cc ON c.category = cc.id 
             WHERE u.id = ?";
 
-            $registros = $DB->get_records_sql($sqlEntrada, array($USER->id), 0, 10);
+            $registros = $DB->get_records_sql($sqlEntrada, array($USER->id), 0, 100);
 
             $dados = [];
 
