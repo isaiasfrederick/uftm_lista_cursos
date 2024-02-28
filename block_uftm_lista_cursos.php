@@ -21,13 +21,19 @@
  * @copyright 1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+//include "utilitarios.php";
+include "./utilitarios.php";
+
+function configuracaoValidaNoBanco2() {
+    return false;
+}
 
 class block_uftm_lista_cursos extends block_base {
 
     function init() {
         //$this->title = get_string('pluginname', 'block_html');
         //$this->title = get_string(identifier: 'pluginname', component:'block_testblock');
-        $this->title = "Suas salas:";
+        $this->title = "Salas que você participa:";
     }
 
     function has_config() {
@@ -67,7 +73,14 @@ class block_uftm_lista_cursos extends block_base {
             //$this->content->text = $userstring;
             //$this->content->footer = 'Texto de rodapé do plugin (bloco)';
             $this->content->items = array();
-    
+
+            /*require_once($CFG->dirroot."/blocks/uftm_lista_cursos/block_utilitarios.php");
+            include($CFG->dirroot."/blocks/uftm_lista_cursos/block_utilitarios.php");
+
+            if (false === configuracaoValidaNoBanco()) {
+                throw new Exception('Configuracao invalida no banco');
+            }*/
+
             /*$anchor = html_writer::tag('a', $USER->firstname . ' '. $USER->lastname, array('href' => 'http://www.globo.com'));
             $this->content->text = html_writer::div($anchor, '', array('id'=>$USER->id));*/
 
@@ -86,9 +99,9 @@ class block_uftm_lista_cursos extends block_base {
             INNER JOIN {course} c ON c.id = ct.instanceid
             INNER JOIN {role} r ON r.id = ra.roleid
             INNER JOIN {course_categories} cc ON c.category = cc.id 
-            WHERE u.id = ?";
+            WHERE u.id = ? AND c.visible = 1";
 
-            $registros = $DB->get_records_sql($sqlEntrada, array($USER->id), 0, 100);
+            $registros = $DB->get_records_sql($sqlEntrada, array($USER->id), 0);
 
             $dados = [];
 

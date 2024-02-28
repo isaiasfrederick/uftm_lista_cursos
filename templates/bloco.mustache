@@ -20,16 +20,20 @@
           list-style-type: square;
     }
 
-@media screen and (min-width: 300px) and (max-width: 700px) {
     .dtr-hidden {
         display: none;
     }
-}
-@media screen and (min-width: 701px) and (max-width: 1208px) {
-    .dtr-hidden {
-        display: none;
+
+    @media screen and (min-width: 300px) and (max-width: 700px) {
+        .dtr-hidden {
+            display: none;
+        }
     }
-}
+    @media screen and (min-width: 701px) and (max-width: 1208px) {
+        .dtr-hidden {
+            display: none;
+        }
+    }
 
 </style>
 
@@ -41,6 +45,7 @@
             rowReorder: {
                 selector: 'td:nth-child(2)'
             },
+            order: [[2, 'desc']],
             language: {
                 "lengthMenu": "Listar até _MENU_ salas por página",
                 "infoEmpty": "<strong>Sem registros disponíveis</strong>",
@@ -64,8 +69,10 @@
             $("#uftm-tabela td").attr('style', 'background-color: white;');
             $("#uftm-tabela a").attr('style', 'color: #525f7f;'); // table.dataTable tr.odd
             $("tr.odd").attr('style', 'background-color: white;'); //
-             $("#uftm-tabela ul").attr('class', 'list-group;'); //
-             $("#uftm-tabela li").attr('class', 'list-group-item;'); //
+            $("#uftm-tabela ul").attr('class', 'list-group;'); //
+            $("#uftm-tabela li").attr('class', 'list-group-item;'); //
+            $("#datatable_filter").attr('style', 'float: left;'); // table.dataTable tr.odd
+            $("#datatable_length").attr('style', 'float: right;'); // table.dataTable tr.odd
         })
     {{/js}}
 <!-- https://datatables.net/examples/advanced_init/row_grouping.html -->
@@ -77,7 +84,7 @@
                 <th></th>
                 <th>Nome completo</th>
                 <th>Nome breve</th>
-                <th>Criação</th>
+                <th>Último acesso</th>
                 <th>Início conteúdo</th>
                 <th>Categoria</th>
             </tr>
@@ -91,7 +98,7 @@
                 </td>
                 <td><a href="{{url}}" target="_blank"><strong>{{fullname}}</strong></a></td>
                 <td>{{shortname}}</td>
-                <td>{{datacriacao}}</td>
+                <td><span class="badge badge-success">{{datacriacao}}</span></td>
                 <td>{{startdate}}</td>
                 <td>{{category}}</td>
             </tr>

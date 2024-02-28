@@ -1,0 +1,3 @@
+function configuracaoValidaNoBanco() {
+    return false;
+}
