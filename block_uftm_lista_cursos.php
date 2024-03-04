@@ -57,7 +57,7 @@ class block_uftm_lista_cursos extends block_base {
     }
 
     function get_content() {
-        try {
+        //try {
             global $DB;
             global $USER;
             global $OUTPUT;
@@ -91,14 +91,24 @@ class block_uftm_lista_cursos extends block_base {
                 c.shortname,
                 cc.name AS catname,
                 u.id,
-                TO_CHAR(TO_TIMESTAMP(c.timecreated), 'YYYY/mm/dd') AS datacriacao,
-                TO_CHAR(TO_TIMESTAMP(c.startdate), 'YYYY/mm/dd') AS startdate
-            FROM {user} u
+                TO_CHAR(TO_TIMESTAMP(UltimoAcesso.tc), 'YYYY/mm/dd') AS datacriacao,
+                CASE WHEN c.startdate <> 0 THEN TO_CHAR(TO_TIMESTAMP(c.startdate), 'YYYY/mm/dd') ELSE 'Nunca acessada' END AS startdate            FROM {user} u
             INNER JOIN {role_assignments} ra ON ra.userid = u.id
             INNER JOIN {context} ct ON ct.id = ra.contextid
             INNER JOIN {course} c ON c.id = ct.instanceid
             INNER JOIN {role} r ON r.id = ra.roleid
             INNER JOIN {course_categories} cc ON c.category = cc.id 
+            LEFT JOIN 
+            (
+                SELECT DISTINCT
+                    l.userid AS luid,
+                    l.courseid AS cid,
+                    MAX(l.timecreated) AS tc
+                FROM {logstore_standard_log} l
+                WHERE l.eventname = '\core\event\course_viewed'
+                GROUP BY luid, cid
+                ORDER BY tc DESC
+            ) AS UltimoAcesso ON UltimoAcesso.cid = c.id AND UltimoAcesso.luid = u.id
             WHERE u.id = ? AND c.visible = 1";
 
             $registros = $DB->get_records_sql($sqlEntrada, array($USER->id), 0);
@@ -111,13 +121,18 @@ class block_uftm_lista_cursos extends block_base {
 
             // component, action, target, 
             foreach ($registros as $reg) {
+                $urlthumb = \core_course\external\course_summary_exporter::get_course_image(get_course($reg->cid));
+
+                if (!$urlthumb)
+                    $urlthumb = 'http://localhost/moodle/pix/semthumb3.jpg';
+
                 array_push($todas_disciplinas, array(
                     'id' => $reg->cid,
                     'fullname' => $reg->fullname,
                     'shortname' => $reg->shortname,
                     'datacriacao' => $reg->datacriacao,
                     'url' => $CFG->wwwroot . '/course/view.php?id=' . $reg->cid,
-                    'thumb' => \core_course\external\course_summary_exporter::get_course_image(get_course($reg->cid)),
+                    'thumb' => $urlthumb,
                     'startdate' => $reg->startdate,
                     'category' => $reg->catname
                     //, 'thumb' => \core_course\external\course_summary_exporter::get_course_image(get_course($reg->cid))
@@ -131,13 +146,13 @@ class block_uftm_lista_cursos extends block_base {
             $this->content->text = $OUTPUT->render_from_template('block_uftm_lista_cursos/bloco', $dados);
             return $this->content;
 
-        } catch (\Exception $e) {
-            $this->content->text = 'Erro!';
+        /*} catch (\Exception $e) {
+            $this->content->text = $e->getMessage();
             return $this->content;
         } catch (Exception $exc) {
-            $this->content->text = 'Erro!';
+            $this->content->text = $e->getMessage();
             return $this->content;
-        }
+        }*/
     }
     
 }
