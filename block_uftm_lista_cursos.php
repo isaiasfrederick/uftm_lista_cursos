@@ -57,7 +57,7 @@ class block_uftm_lista_cursos extends block_base {
     }
 
     function get_content() {
-        //try {
+        try {
             global $DB;
             global $USER;
             global $OUTPUT;
@@ -91,7 +91,7 @@ class block_uftm_lista_cursos extends block_base {
                 c.shortname,
                 cc.name AS catname,
                 u.id,
-                TO_CHAR(TO_TIMESTAMP(UltimoAcesso.tc), 'YYYY/mm/dd') AS datacriacao,
+                CASE WHEN UltimoAcesso.tc <> 0  THEN TO_CHAR(TO_TIMESTAMP(UltimoAcesso.tc), 'YYYY/mm/dd') ELSE 'Nunca acessada'  END AS datacriacao,
                 CASE WHEN c.startdate <> 0 THEN TO_CHAR(TO_TIMESTAMP(c.startdate), 'YYYY/mm/dd') ELSE 'Nunca acessada' END AS startdate            FROM {user} u
             INNER JOIN {role_assignments} ra ON ra.userid = u.id
             INNER JOIN {context} ct ON ct.id = ra.contextid
@@ -105,7 +105,7 @@ class block_uftm_lista_cursos extends block_base {
                     l.courseid AS cid,
                     MAX(l.timecreated) AS tc
                 FROM {logstore_standard_log} l
-                WHERE l.eventname = '\core\event\course_viewed'
+                WHERE l.eventname = '\\core\\event\\course_viewed'
                 GROUP BY luid, cid
                 ORDER BY tc DESC
             ) AS UltimoAcesso ON UltimoAcesso.cid = c.id AND UltimoAcesso.luid = u.id
@@ -146,13 +146,13 @@ class block_uftm_lista_cursos extends block_base {
             $this->content->text = $OUTPUT->render_from_template('block_uftm_lista_cursos/bloco', $dados);
             return $this->content;
 
-        /*} catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->content->text = $e->getMessage();
             return $this->content;
         } catch (Exception $exc) {
             $this->content->text = $e->getMessage();
             return $this->content;
-        }*/
+        }
     }
     
 }
